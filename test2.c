@@ -3,6 +3,7 @@
 #include<string.h>
 #include<math.h>
 #include<stdlib.h>
+#include<assert.h>
 //int main()
 //{
 //	char arr[] = "abcdef";
@@ -296,26 +297,134 @@
 //实现一个函数，可以做选字符串中k个字符
 //例如：
 //ABCD左旋一个字符得到BCDA
-//ABCD右旋一个字符得到CDBA
-void turn_left(char arr[], int k,int len)
+//ABCD左旋两个字符得到CDAB
+//void turn_right(char arr[], int k)//abcde - eabcd
+//{
+//	int len = strlen(arr);
+//	int i = 0;
+//	for (i = 0; i < k; i++)//旋转次数
+//	{
+//		char temp = arr[len - 1];//e挪到临时变量
+//		int j = 0;
+//		for (j = len - 1; j > 0; j--)//将abcd往右边前进
+//		{
+//			arr[j] = arr[j - 1];
+//		}
+//		arr[0] = temp;//将e放到第一位
+//	}
+//}
+//void turn_left(char arr[], int k)//abcde - bcdea
+//{
+//	int len = strlen(arr);//若在主函数传参，len传不进来
+//	int i = 0;
+//	for ( i = 0; i < k; i++)//旋转次数
+//	{
+//		char temp = arr[0];//a挪到临时变量
+//		int j = 0;
+//		for ( j = 0; j < len -1; j++)//将bcde往左边前进
+//		{
+//			arr[j] = arr[j + 1];
+//		}
+//		arr[len - 1] = temp;//将a放到最后一位
+//	}
+//}
+//方法2 - abcde（例如左旋2字符变成cdeab）
+//1.要旋转的字符先自己交换
+//abcde - bacde
+//2.不旋转的字符自己交换
+//bacde - baedc
+//3.整体进行逆序交换
+//baedc - cdeab
+void reverse_right(char* right, char* left)
 {
-	char temp = arr[0];
-	arr[0] = arr[1];
-	if (k >= 1)
+	assert(left != NULL);
+	assert(right != NULL);
+	while (right > left)
 	{
-		k--;
-		turn_left(arr + 1, k, len);
+		char* temp = *right;
+		*right = *left;
+		*left = temp;
+		left++;
+		right--;
 	}
-	arr[len - 1] = arr[0];
+}
+void turn_right(char* arr, int k)
+{
+	assert(arr != NULL);
+	int len = strlen(arr);
+	assert(k >= 0);
+	//1
+	reverse_right(arr + len - 1, arr + len - k);
+	//2
+	reverse_right(arr + len - 1 - k, arr);
+	//3
+	reverse_right(arr + len - 1, arr);
+}
+//void reverse_left(char* left, char* right)
+//{
+//	assert(left != NULL);
+//	assert(right != NULL);
+//	while (left < right)
+//	{
+//		char* temp = *left;
+//		*left = *right;
+//		*right = temp;
+//		left++;
+//		right--;
+//	}
+//}
+//void turn_left(char* arr, int k)
+//{
+//	assert(arr != NULL);
+//	int len = strlen(arr);
+//	assert(k >= 0);
+//	//1
+//	reverse_left(arr, arr + k - 1);
+//	//2
+//	reverse_left(arr + k, arr + len - 1);
+//	//3
+//	reverse_left(arr, arr + len - 1);
+//}
+//int main()
+//{
+//	char arr[100] = "";
+//	int k = 2;
+//	printf("请输入字符:");
+//	gets(arr);
+//	/*turn_left(arr, k);
+//	printf("左旋%d个字符后的字符串=%s\n", k, arr);*/
+//	turn_right(arr, k);
+//	printf("右旋%d个字符后的字符串=%s",k, arr);
+//	return 0;
+//}
+
+//判断一个字符串是否为另一个字符串旋转之后的字符串
+int panduan_right(char arr1[], char arr2[])
+{
+	int len = strlen(arr1);
+	int i = 0;
+	for ( i = 0; i < len; i++)
+	{
+		turn_right(arr1, 1);
+		if (strcmp(arr1, arr2) == 0)
+		{
+			return 1;
+		}
+	}
+	return 0;
 }
 int main()
 {
-	char arr[] = "";
-	int k = 1;
-	int len = strlen(arr);
-	printf("请输入字符和要旋转的数字:");
-	gets(arr);
-	turn_left(arr, k,len);
-	printf("%s ", arr);
+	char arr1[] = "cdeab";
+	char arr2[] = "abcde";
+	int ret = panduan_right(arr1, arr2);
+	if (ret == 1)
+	{
+		printf("y\n");
+	}
+	else
+	{
+		printf("n\n");
+	}
 	return 0;
 }
