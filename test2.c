@@ -335,31 +335,31 @@
 //bacde - baedc
 //3.整体进行逆序交换
 //baedc - cdeab
-void reverse_right(char* right, char* left)
-{
-	assert(left != NULL);
-	assert(right != NULL);
-	while (right > left)
-	{
-		char* temp = *right;
-		*right = *left;
-		*left = temp;
-		left++;
-		right--;
-	}
-}
-void turn_right(char* arr, int k)
-{
-	assert(arr != NULL);
-	int len = strlen(arr);
-	assert(k >= 0);
-	//1
-	reverse_right(arr + len - 1, arr + len - k);
-	//2
-	reverse_right(arr + len - 1 - k, arr);
-	//3
-	reverse_right(arr + len - 1, arr);
-}
+//void reverse_right(char* right, char* left)
+//{
+//	assert(left != NULL);
+//	assert(right != NULL);
+//	while (right > left)
+//	{
+//		char* temp = *right;
+//		*right = *left;
+//		*left = temp;
+//		left++;
+//		right--;
+//	}
+//}
+//void turn_right(char* arr, int k)
+//{
+//	assert(arr != NULL);
+//	int len = strlen(arr);
+//	assert(k >= 0);
+//	//1
+//	reverse_right(arr + len - 1, arr + len - k);
+//	//2
+//	reverse_right(arr + len - 1 - k, arr);
+//	//3
+//	reverse_right(arr + len - 1, arr);
+//}
 //void reverse_left(char* left, char* right)
 //{
 //	assert(left != NULL);
@@ -398,16 +398,112 @@ void turn_right(char* arr, int k)
 //	return 0;
 //}
 
-//判断一个字符串是否为另一个字符串旋转之后的字符串
-int panduan_right(char arr1[], char arr2[])
+////判断一个字符串是否为另一个字符串旋转之后的字符串
+//int panduan_right(char arr1[], char arr2[])
+//{
+//	int len = strlen(arr1);
+//	int i = 0;
+//	for ( i = 0; i < len; i++)
+//	{
+//		turn_right(arr1, 1);
+//		if (strcmp(arr1, arr2) == 0)
+//		{
+//			return 1;
+//		}
+//	}
+//	return 0;
+//}
+//int main()
+//{
+//	char arr1[] = "cdeab";
+//	char arr2[] = "abcde";
+//	int ret = panduan_right(arr1, arr2);
+//	if (ret == 1)
+//	{
+//		printf("y\n");
+//	}
+//	else
+//	{
+//		printf("n\n");
+//	}
+//	return 0;
+//}
+
+//int is_turn(char* str1, char* str2)
+//{
+//	int len1 = strlen(str1);
+//	int len2 = strlen(str2);
+//	//判断两个字符串长度是否一致
+//	if (len2 != len1 )
+//	{
+//		return 0;
+//	}
+//	//1.在arr1之后增加arr1的内容
+//	strncat(str1, str1, len1);
+//	//2.比较arr1和arr2是否相等
+//	if (strstr(str1, str2) == NULL)
+//	{
+//		return 0;
+//	}
+//	else
+//	{
+//		return 1;
+//	}
+//}
+//int main()
+//{
+//	char arr1[30] = "abcdef";
+//	char arr2[] = "efab";
+//	if (is_turn(arr1, arr2) == 1)
+//	{
+//		printf("y\n");
+//	}
+//	else
+//	{
+//		printf("n\n");
+//	}
+//	return 0;
+//}
+
+//int is_panduan(int arr[4][5], int k, int hang, int lie)
+//{
+//	int x = 0;
+//	int y = lie - 1;
+//	while (x < hang && y < lie)
+//	{
+//		if (arr[x][y] > k)
+//		{
+//			y--;
+//		}
+//		else if (arr[x][y] < k)
+//		{
+//			x++;
+//		}
+//		else
+//		{
+//			return 1;
+//		}
+//	}
+//	return 0;
+//}
+int is_panduan(int arr[4][5], int k, int* hang, int* lie)
 {
-	int len = strlen(arr1);
-	int i = 0;
-	for ( i = 0; i < len; i++)
+	int x = 0;
+	int y = *lie - 1;
+	while (x < *hang && y < *lie)
 	{
-		turn_right(arr1, 1);
-		if (strcmp(arr1, arr2) == 0)
+		if (arr[x][y] > k)
 		{
+			y--;
+		}
+		else if (arr[x][y] < k)
+		{
+			x++;
+		}
+		else
+		{
+			*hang = x;
+			*lie = y;
 			return 1;
 		}
 	}
@@ -415,12 +511,13 @@ int panduan_right(char arr1[], char arr2[])
 }
 int main()
 {
-	char arr1[] = "cdeab";
-	char arr2[] = "abcde";
-	int ret = panduan_right(arr1, arr2);
-	if (ret == 1)
+	int arr[4][5] = { {1,2,3,4,5},{4,5,6,7,8},{5,6,7,8,9},{6,7,8,9,10} };
+	int k = 3;
+	int x = 4; int y = 5;
+	if (is_panduan(arr, k, &x, &y) == 1)
 	{
 		printf("y\n");
+		printf("x=%d,y=%d", x, y);
 	}
 	else
 	{
